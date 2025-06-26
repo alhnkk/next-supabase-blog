@@ -254,7 +254,7 @@ export function AdvancedSearch() {
     return (
       filters.categoryId ||
       filters.authorId ||
-      filters.tags.length > 0 ||
+      (Array.isArray(filters.tags) && filters.tags.length > 0) ||
       filters.postType ||
       filters.dateRange.from ||
       filters.dateRange.to ||
@@ -270,7 +270,8 @@ export function AdvancedSearch() {
     let count = 0;
     if (filters.categoryId) count++;
     if (filters.authorId) count++;
-    if (filters.tags.length > 0) count += filters.tags.length;
+    if (Array.isArray(filters.tags) && filters.tags.length > 0)
+      count += filters.tags.length;
     if (filters.postType) count++;
     if (filters.dateRange.from || filters.dateRange.to) count++;
     if (filters.readingTime.min > 0 || filters.readingTime.max > 0) count++;
@@ -290,7 +291,9 @@ export function AdvancedSearch() {
     if (filters.sortOrder !== "desc") params.set("order", filters.sortOrder);
     if (filters.dateRange.from) params.set("from", filters.dateRange.from);
     if (filters.dateRange.to) params.set("to", filters.dateRange.to);
-    filters.tags.forEach((tag) => params.append("tags", tag));
+    if (Array.isArray(filters.tags)) {
+      filters.tags.forEach((tag) => params.append("tags", tag));
+    }
 
     const url = params.toString() ? `${pathname}?${params}` : pathname;
     router.replace(url, { scroll: false });
@@ -311,7 +314,7 @@ export function AdvancedSearch() {
   };
 
   const addTag = (tagId: string) => {
-    if (!filters.tags.includes(tagId)) {
+    if (Array.isArray(filters.tags) && !filters.tags.includes(tagId)) {
       setFilters((prev) => ({ ...prev, tags: [...prev.tags, tagId] }));
     }
   };
@@ -546,23 +549,26 @@ export function AdvancedSearch() {
               <div className="space-y-2">
                 <Label>Etiketler</Label>
                 <div className="flex flex-wrap gap-2">
-                  {metadata.tags.map((tag) => {
-                    const isSelected = filters.tags.includes(tag.id);
-                    return (
-                      <Badge
-                        key={tag.id}
-                        variant={isSelected ? "default" : "outline"}
-                        className="cursor-pointer"
-                        onClick={() =>
-                          isSelected ? removeTag(tag.id) : addTag(tag.id)
-                        }
-                      >
-                        <span className="mr-1 font-semibold text-xs">#</span>
-                        {tag.name}
-                        {isSelected && <X className="w-3 h-3 ml-1" />}
-                      </Badge>
-                    );
-                  })}
+                  {Array.isArray(metadata.tags) &&
+                    metadata.tags.map((tag) => {
+                      const isSelected =
+                        Array.isArray(filters.tags) &&
+                        filters.tags.includes(tag.id);
+                      return (
+                        <Badge
+                          key={tag.id}
+                          variant={isSelected ? "default" : "outline"}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            isSelected ? removeTag(tag.id) : addTag(tag.id)
+                          }
+                        >
+                          <span className="mr-1 font-semibold text-xs">#</span>
+                          {tag.name}
+                          {isSelected && <X className="w-3 h-3 ml-1" />}
+                        </Badge>
+                      );
+                    })}
                 </div>
               </div>
             </CardContent>
@@ -615,19 +621,20 @@ export function AdvancedSearch() {
                 </Badge>
               )}
 
-              {filters.tags.map((tagId) => {
-                const tag = metadata.tags.find((t) => t.id === tagId);
-                return tag ? (
-                  <Badge key={tagId} variant="secondary" className="gap-1">
-                    <span className="font-semibold text-xs">#</span>
-                    {tag.name}
-                    <X
-                      className="w-3 h-3 cursor-pointer"
-                      onClick={() => removeTag(tagId)}
-                    />
-                  </Badge>
-                ) : null;
-              })}
+              {Array.isArray(filters.tags) &&
+                filters.tags.map((tagId) => {
+                  const tag = metadata.tags.find((t) => t.id === tagId);
+                  return tag ? (
+                    <Badge key={tagId} variant="secondary" className="gap-1">
+                      <span className="font-semibold text-xs">#</span>
+                      {tag.name}
+                      <X
+                        className="w-3 h-3 cursor-pointer"
+                        onClick={() => removeTag(tagId)}
+                      />
+                    </Badge>
+                  ) : null;
+                })}
 
               {(filters.dateRange.from || filters.dateRange.to) && (
                 <Badge variant="secondary" className="gap-1">

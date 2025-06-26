@@ -234,7 +234,7 @@ export function UserProfileClient({
   };
 
   const renderPosts = (postList: Post[]) => {
-    if (postList.length === 0) {
+    if (!Array.isArray(postList) || postList.length === 0) {
       return (
         <div className="text-center py-12">
           <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -258,7 +258,7 @@ export function UserProfileClient({
   };
 
   const renderComments = () => {
-    if (comments.length === 0) {
+    if (!Array.isArray(comments) || comments.length === 0) {
       return (
         <div className="text-center py-12">
           <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />

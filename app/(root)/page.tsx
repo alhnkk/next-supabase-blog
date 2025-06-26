@@ -139,17 +139,23 @@ export default async function HomePage({
       : [];
 
   // Recent posts (hero ve featured posts hariç tüm postlar)
-  const featuredPostIds = featuredPosts.map((post) => post.id);
-  const recentPosts = posts.filter(
-    (post) => post.id !== heroPost?.id && !featuredPostIds.includes(post.id)
-  );
+  const featuredPostIds = Array.isArray(featuredPosts)
+    ? featuredPosts.map((post) => post.id)
+    : [];
+  const recentPosts = Array.isArray(posts)
+    ? posts.filter(
+        (post) => post.id !== heroPost?.id && !featuredPostIds.includes(post.id)
+      )
+    : [];
 
   // Trending posts (gerçek view sayılarına göre)
-  const trendingPosts = posts
-    .sort((a, b) => (b._count?.views || 0) - (a._count?.views || 0))
-    .slice(0, 4);
+  const trendingPosts = Array.isArray(posts)
+    ? posts
+        .sort((a, b) => (b._count?.views || 0) - (a._count?.views || 0))
+        .slice(0, 4)
+    : [];
 
-  if (posts.length === 0) {
+  if (!Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="bg-background">
         <div className="container max-w-7xl mx-auto px-4 py-16">
@@ -200,7 +206,7 @@ export default async function HomePage({
             {/* Main Content */}
             <main className="lg:col-span-3 space-y-12">
               {/* Editor's Picks - Featured Posts */}
-              {featuredPosts.length > 0 && (
+              {Array.isArray(featuredPosts) && featuredPosts.length > 0 && (
                 <section className="animate-in space-y-8">
                   <div className="flex items-center gap-4 mb-8">
                     <Badge

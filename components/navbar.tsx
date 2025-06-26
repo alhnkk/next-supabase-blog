@@ -239,7 +239,9 @@ export function Navbar() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() =>
-                    searchResults.length > 0 && setShowSearchDropdown(true)
+                    searchResults &&
+                    searchResults.length > 0 &&
+                    setShowSearchDropdown(true)
                   }
                   className="pl-10 pr-4 h-9 text-sm flex-1 text-black"
                 />
@@ -256,6 +258,7 @@ export function Navbar() {
                 )}
 
                 {!isSearching &&
+                  searchResults &&
                   searchResults.length === 0 &&
                   searchQuery.trim() && (
                     <div className="p-4 text-center text-muted-foreground text-sm">
@@ -263,7 +266,7 @@ export function Navbar() {
                     </div>
                   )}
 
-                {!isSearching && searchResults.length > 0 && (
+                {!isSearching && searchResults && searchResults.length > 0 && (
                   <>
                     {searchResults.map((post) => (
                       <div
@@ -369,7 +372,7 @@ export function Navbar() {
                 </DropdownMenuItem>
                 {!isLoading &&
                   !error &&
-                  categories &&
+                  Array.isArray(categories) &&
                   categories.length > 0 && (
                     <div className="border-t border-gray-200 my-1" />
                   )}
@@ -385,7 +388,7 @@ export function Navbar() {
                 )}
                 {!isLoading &&
                   !error &&
-                  categories &&
+                  Array.isArray(categories) &&
                   categories.length === 0 && (
                     <DropdownMenuItem
                       disabled
@@ -396,7 +399,7 @@ export function Navbar() {
                   )}
                 {!isLoading &&
                   !error &&
-                  categories &&
+                  Array.isArray(categories) &&
                   categories.length > 0 &&
                   categories.map((cat) => {
                     let Icon: React.ComponentType<{ className?: string }> =
@@ -500,7 +503,7 @@ export function Navbar() {
                     )}
                     {!isLoading &&
                       !error &&
-                      categories &&
+                      Array.isArray(categories) &&
                       categories.length === 0 && (
                         <span className=" text-muted-foreground py-2">
                           Kategori bulunamadı
@@ -508,7 +511,7 @@ export function Navbar() {
                       )}
                     {!isLoading &&
                       !error &&
-                      categories &&
+                      Array.isArray(categories) &&
                       categories.length > 0 &&
                       categories.map((cat) => {
                         let Icon: React.ComponentType<{ className?: string }> =

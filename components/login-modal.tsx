@@ -48,8 +48,10 @@ export function LoginModal({
       if (result.error) {
         setError(result.error.message || "Giriş başarısız");
       } else {
+        // Modal'ı kapat - session hook otomatik olarak güncellenecek
         onOpenChange(false);
-        window.location.reload();
+        // Form'u temizle
+        setLoginData({ email: "", password: "" });
       }
     } catch (err) {
       setError("Bir hata oluştu");

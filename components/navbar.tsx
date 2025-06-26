@@ -79,7 +79,6 @@ interface SearchResult {
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [session, setSession] = useState<any>(null);
   const [open, setOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -100,45 +99,8 @@ export function Navbar() {
   // Kategorileri hook ile çekiyoruz
   const { categories, isLoading, error, getCategories } = useCategory();
 
-  // Session yükleme - cache ile
-  useEffect(() => {
-    const getSession = async () => {
-      try {
-        // Önce localStorage'dan kontrol et
-        const cachedSession = localStorage.getItem("user_session");
-        if (cachedSession) {
-          const parsed = JSON.parse(cachedSession);
-          // 5 dakika cache süresi
-          if (Date.now() - parsed.timestamp < 5 * 60 * 1000) {
-            setSession(parsed.data);
-            return;
-          }
-        }
-
-        const sessionData = await authClient.getSession();
-        const userData = sessionData?.data || null;
-        setSession(userData);
-
-        // Cache'le
-        if (userData) {
-          localStorage.setItem(
-            "user_session",
-            JSON.stringify({
-              data: userData,
-              timestamp: Date.now(),
-            })
-          );
-        } else {
-          localStorage.removeItem("user_session");
-        }
-      } catch (_error) {
-        console.error("Session error:", _error);
-        setSession(null);
-        localStorage.removeItem("user_session");
-      }
-    };
-    getSession();
-  }, []);
+  // AuthClient hook kullan - reaktif session yönetimi
+  const { data: session, isPending: sessionLoading } = authClient.useSession();
 
   useEffect(() => {
     // Sadece ilk renderda çağır
@@ -624,9 +586,10 @@ export function Navbar() {
                     <Button
                       variant="ghost"
                       className="w-full justify-start font-medium text-muted-foreground hover:text-primary"
-                      onClick={() => {
-                        authClient.signOut();
+                      onClick={async () => {
+                        await authClient.signOut();
                         setOpen(false);
+                        // Session otomatik olarak hook tarafından güncellenecek
                       }}
                     >
                       Çıkış Yap

@@ -120,8 +120,10 @@ export function RegisterModal({
       if (result.error) {
         setError(result.error.message || "Kayıt başarısız");
       } else {
+        // Modal'ı kapat - session hook otomatik olarak güncellenecek
         onOpenChange(false);
-        window.location.reload();
+        // Form'u temizle
+        setRegisterData({ name: "", email: "", password: "" });
       }
     } catch (err) {
       setError("Bir hata oluştu");

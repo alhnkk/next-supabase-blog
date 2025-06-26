@@ -3,6 +3,8 @@ import { Playfair_Display, Red_Hat_Display } from "next/font/google";
 import { Toaster } from "sonner";
 import { Footer } from "@/components/footer";
 import { BannedUserDetector } from "@/components/banned-user-detector";
+import { ErrorBoundary } from "@/components/error-boundary";
+import "@/lib/utils/global-fixes";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -36,9 +38,11 @@ export default function RootLayout({
       <body
         className={`${redHatDisplay.className} ${playfairDisplay.variable}`}
       >
-        <BannedUserDetector />
-        {children}
-        <Toaster position="top-right" richColors />
+        <ErrorBoundary>
+          <BannedUserDetector />
+          {children}
+          <Toaster position="top-right" richColors />
+        </ErrorBoundary>
       </body>
     </html>
   );

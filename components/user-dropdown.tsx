@@ -11,9 +11,17 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { User, LogOut, Shield, Heart } from "lucide-react";
+import { useHydration } from "@/hooks/use-hydration";
 
 export function UserDropdown() {
-  const { data: session } = authClient.useSession();
+  // Hydration kontrolü
+  const isHydrated = useHydration();
+
+  // SSR sırasında çalışmayacak şekilde güvenli hale getir
+  const sessionQuery = isHydrated
+    ? authClient.useSession()
+    : { data: null, isPending: true };
+  const { data: session } = sessionQuery;
 
   if (!session?.user) return null;
 

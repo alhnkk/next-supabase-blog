@@ -1,0 +1,72 @@
+{
+  "name": "JURNALİZE - Modern Blog Platformu",
+  "short_name": "JURNALİZE",
+  "description": "Modern blog ve içerik paylaşım platformu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "tr",
+  "categories": ["lifestyle", "news", "social"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Yeni Yazı",
+      "short_name": "Yaz",
+      "description": "Yeni blog yazısı oluştur",
+      "url": "/admin/posts/new",
+      "icons": [
+        {
+          "src": "/shortcut-write.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Profil",
+      "short_name": "Profil",
+      "description": "Kullanıcı profilini görüntüle",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "/shortcut-profile.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

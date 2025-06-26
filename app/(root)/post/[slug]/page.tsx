@@ -11,9 +11,12 @@ export async function generateMetadata({
   const { slug } = await params;
 
   try {
-    const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
-      next: { revalidate: 300 },
-    });
+    const res = await fetch(
+      `https://next-supabase-blog-xi.vercel.app/api/posts/${slug}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     if (!res.ok) {
       return {
@@ -33,9 +36,9 @@ export async function generateMetadata({
     let siteName = "Blog";
     try {
       const settingsResponse = await fetch(
-        `http://localhost:3000/api/admin/settings`,
+        `https://next-supabase-blog-xi.vercel.app/api/admin/settings`,
         {
-          next: { revalidate: 3600 }, // 1 saat cache
+          cache: "no-store",
         }
       );
       if (settingsResponse.ok) {
@@ -82,9 +85,12 @@ export default async function PostDetailPage({
 }) {
   const { slug } = await params;
 
-  const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
-    next: { revalidate: 300 }, // 5 dakika cache
-  });
+  const res = await fetch(
+    `https://next-supabase-blog-xi.vercel.app/api/posts/${slug}`,
+    {
+      cache: "no-store",
+    }
+  );
 
   const post = await res.json();
 

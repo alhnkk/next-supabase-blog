@@ -4,7 +4,8 @@ import { MostRead } from "@/components/sidebar/most-read";
 async function getCategories() {
   const res = await fetch(
     `${
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+      process.env.NEXT_PUBLIC_API_URL ||
+      "https://next-supabase-blog-xi.vercel.app/"
     }/api/categories`,
     { cache: "no-store" }
   );

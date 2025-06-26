@@ -2,8 +2,9 @@ import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "https://journalize.vercel.app";
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ).replace(/\/$/, ""); // Remove trailing slash
 
   // Statik sayfalar
   const staticPages = [

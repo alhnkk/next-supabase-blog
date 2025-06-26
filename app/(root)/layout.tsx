@@ -27,7 +27,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+    url:
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      "https://next-supabase-blog-xi.vercel.app/",
     siteName: "Blog",
     title: "Blog - Modern İçerik Platformu",
     description:

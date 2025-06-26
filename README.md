@@ -368,7 +368,7 @@ npm install
 # .env.local
 DATABASE_URL="postgresql://..."
 BETTER_AUTH_SECRET="..."
-BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_URL="https://next-supabase-blog-xi.vercel.app/"
 GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
 ```
@@ -493,7 +493,6 @@ journalize-blog/
 ### Orta Öncelik
 
 - [ ] **Real-time Notifications**
-
 
 ### Düşük Öncelik
 

@@ -23,7 +23,7 @@ interface SiteSettingsStore {
 const defaultSettings: SiteSettings = {
   siteName: "Blog",
   siteDescription: "Modern blog platformu",
-  siteUrl: "https://localhost:3000",
+  siteUrl: "https://next-supabase-blog-xi.vercel.app/",
   siteLogo: "/logo.svg",
   adminEmail: "admin@blog.com",
   primaryColor: "#1e293b",

@@ -250,7 +250,7 @@ model Settings {
   id            String    @id @default(cuid())
   siteName      String    @default("Blog")
   siteDescription String? @default("Modern blog platformu")
-  siteUrl       String?   @default("https://localhost:3000")
+  siteUrl       String?   @default("https://next-supabase-blog-xi.vercel.app/") 
   siteLogo      String?
   adminEmail    String?   @default("admin@blog.com")
   defaultCategory String?

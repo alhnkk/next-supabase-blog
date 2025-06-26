@@ -67,7 +67,7 @@ export default async function CategoryPage({
   let apiError = "";
   try {
     const categoryRes = await fetch(
-      `http://localhost:3000/api/categories/${slug}`,
+      `https://next-supabase-blog-xi.vercel.app/api/categories/${slug}`,
       {
         cache: "no-store",
       }
@@ -121,7 +121,7 @@ export default async function CategoryPage({
 
   try {
     const postsRes = await fetch(
-      `http://localhost:3000/api/posts?categoryId=${category.id}&page=${currentPage}&limit=${postsPerPage}&isPublished=true`,
+      `https://next-supabase-blog-xi.vercel.app/api/posts?categoryId=${category.id}&page=${currentPage}&limit=${postsPerPage}&isPublished=true`,
       { cache: "no-store" }
     );
     const { data, total } = await postsRes.json();

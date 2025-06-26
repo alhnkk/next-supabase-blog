@@ -10,7 +10,8 @@ import { supabase } from "../supabaseClient";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://next-supabase-blog-xi.vercel.app/api";
 
 // API istek yapılandırması
 const defaultHeaders = {

@@ -84,7 +84,7 @@ export default async function HomePage({
 
   try {
     const res = await fetch(
-      `http://localhost:3000/api/posts?page=${currentPage}&limit=${postsPerPage}&isPublished=true`,
+      `https://next-supabase-blog-xi.vercel.app/api/posts?page=${currentPage}&limit=${postsPerPage}&isPublished=true`,
       {
         next: { revalidate: 60 }, // 1 dakika cache
       }
@@ -115,7 +115,7 @@ export default async function HomePage({
     // 2. sayfa ve sonrasında: en son paylaşılan post
     try {
       const heroRes = await fetch(
-        `http://localhost:3000/api/posts?page=1&limit=1&isPublished=true`,
+        `https://next-supabase-blog-xi.vercel.app/api/posts?page=1&limit=1&isPublished=true`,
         { next: { revalidate: 60 } }
       );
       const { data: heroData } = await heroRes.json();

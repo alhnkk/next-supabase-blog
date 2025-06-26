@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         data: {
           siteName: "Blog",
           siteDescription: "Modern blog platformu",
-          siteUrl: "https://localhost:3000",
+          siteUrl: "https://next-supabase-blog-xi.vercel.app/",
           adminEmail: "admin@blog.com",
           postsPerPage: 10,
           enableComments: true,

@@ -21,7 +21,8 @@ export const metadata: Metadata = {
   title: "Blog",
   description: "Modern blog platformu",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_BASE_URL ||
+      "https://next-supabase-blog-xi.vercel.app/"
   ),
 };
 
@@ -34,7 +35,6 @@ export default function RootLayout({
     <html lang="tr">
       <body
         className={`${redHatDisplay.className} ${playfairDisplay.variable}`}
-        suppressHydrationWarning={true}
       >
         <BannedUserDetector />
         {children}

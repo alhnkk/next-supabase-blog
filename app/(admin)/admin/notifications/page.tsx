@@ -54,7 +54,8 @@ async function getNotifications() {
   try {
     const response = await fetch(
       `${
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+        process.env.NEXT_PUBLIC_BASE_URL ||
+        "https://next-supabase-blog-xi.vercel.app/"
       }/api/admin/notifications?limit=50`,
       {
         cache: "no-store",

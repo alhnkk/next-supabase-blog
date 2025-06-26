@@ -30,7 +30,7 @@ export default async function CategoriesPage() {
 
   try {
     const res = await fetch(
-      `http://localhost:3000/api/categories?includePosts=true`,
+      `https://next-supabase-blog-xi.vercel.app/api/categories?includePosts=true`,
       {
         cache: "no-store",
       }

@@ -123,7 +123,12 @@ export function RegisterModal({
         // Modal'ı kapat - session hook otomatik olarak güncellenecek
         onOpenChange(false);
         // Form'u temizle
-        setRegisterData({ name: "", email: "", password: "" });
+        setRegisterData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
       }
     } catch (err) {
       setError("Bir hata oluştu");

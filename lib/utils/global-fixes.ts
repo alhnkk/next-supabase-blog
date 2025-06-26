@@ -7,7 +7,7 @@
 if (typeof window !== "undefined") {
   // Override Object.defineProperty to safely handle any property access
   const originalDefineProperty = Object.defineProperty;
-  Object.defineProperty = function(obj, prop, descriptor) {
+  Object.defineProperty = function<T>(obj: T, prop: PropertyKey, descriptor: PropertyDescriptor & ThisType<any>): T {
     try {
       if (prop === 'length' && Array.isArray(obj)) {
         // Ensure array length access is always safe
@@ -74,9 +74,9 @@ if (typeof window !== "undefined") {
   });
 
   // Patch React's areHookInputsEqual if possible
-  if (window.React) {
-    const originalCreateElement = window.React.createElement;
-    window.React.createElement = function(type: any, props: any, ...children: any[]) {
+  if ((window as any).React) {
+    const originalCreateElement = (window as any).React.createElement;
+    (window as any).React.createElement = function(type: any, props: any, ...children: any[]) {
       try {
         return originalCreateElement.call(this, type, props, ...children);
       } catch (error: any) {

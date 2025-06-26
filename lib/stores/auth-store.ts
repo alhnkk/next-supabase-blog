@@ -14,19 +14,22 @@ interface User {
 
 // Helper fonksiyonlar
 export const useAuthStore = () => {
+  // Hook her zaman çağrılmalı (React rules of hooks)
   const { data: session, isPending } = authClient.useSession();
 
   return {
-    user: session?.user ? {
-      id: session.user.id,
-      email: session.user.email,
-      name: session.user.name,
-      username: session.user.email.split('@')[0], // Generate username from email
-      role: (session.user as any).role,
-      isActive: !(session.user as any).banned,
-      createdAt: session.user.createdAt,
-      updatedAt: session.user.updatedAt,
-    } as User : null,
+    user: session?.user
+      ? ({
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.name,
+          username: session.user.email.split("@")[0], // Generate username from email
+          role: (session.user as any).role,
+          isActive: !(session.user as any).banned,
+          createdAt: session.user.createdAt,
+          updatedAt: session.user.updatedAt,
+        } as User)
+      : null,
     isAuthenticated: !!session?.user,
     isLoading: isPending,
 

@@ -79,6 +79,8 @@ interface SearchResult {
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+  
+  // ALL HOOKS MUST BE CALLED IN THE SAME ORDER EVERY TIME
   const [open, setOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -90,31 +92,32 @@ export function Navbar() {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 800);
 
-  // Hydration kontrolü
+  // Hydration kontrolü - ALWAYS call this hook
   const isHydrated = useHydration();
 
-  // Site ayarları için store
+  // Site ayarları için store - ALWAYS call this hook
   const { settings, fetchSettings } = useSiteSettingsStore();
 
-  // Kategorileri hook ile çekiyoruz
+  // Kategorileri hook ile çekiyoruz - ALWAYS call this hook
   const { categories, isLoading, error, getCategories } = useCategory();
 
-  // AuthClient hook kullan - reaktif session yönetimi
-  // SSR sırasında çalışmayacak şekilde güvenli hale getir
-  const sessionQuery = isHydrated
-    ? authClient.useSession()
-    : { data: null, isPending: true };
+  // AuthClient hook - ALWAYS call this hook (React rules of hooks)
+  const sessionQuery = authClient.useSession();
   const { data: session, isPending: sessionLoading } = sessionQuery;
+  
+  // Hydration kontrolü ile güvenli kullanım
+  const safeSession = isHydrated ? session : null;
 
+  // ALWAYS call useEffect hooks in the same order
   useEffect(() => {
     // Sadece ilk renderda çağır
     getCategories();
     if (isHydrated) {
       fetchSettings();
     }
-  }, [isHydrated]);
+  }, [isHydrated]); // Remove function dependencies to stabilize
 
-  // Search functionality
+  // Search functionality - ALWAYS call this useEffect
   useEffect(() => {
     const searchPosts = async () => {
       if (
@@ -149,6 +152,22 @@ export function Navbar() {
     searchPosts();
   }, [debouncedSearchQuery]);
 
+  // Click outside handler - ALWAYS call this useEffect
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // ALL FUNCTION DECLARATIONS AFTER HOOKS
   const isActive = (path: string) => pathname === path;
 
   const handleSwitchToRegister = () => {
@@ -181,21 +200,6 @@ export function Navbar() {
     setSearchQuery("");
     setShowSearchDropdown(false);
   };
-
-  // Click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowSearchDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
@@ -432,7 +436,7 @@ export function Navbar() {
           </div>
           {/* Auth Butonları */}
           <div className="flex items-center gap-3">
-            {session?.user ? (
+            {safeSession?.user ? (
               <UserDropdown />
             ) : (
               <>
@@ -572,7 +576,7 @@ export function Navbar() {
 
                 <div className="border-t my-4" />
 
-                {session?.user ? (
+                {safeSession?.user ? (
                   <div className="space-y-1">
                     <Link
                       href="/profil"
@@ -581,7 +585,8 @@ export function Navbar() {
                     >
                       Profil
                     </Link>
-                    {(session.user as { role?: string }).role === "admin" && (
+                    {(safeSession.user as { role?: string }).role ===
+                      "admin" && (
                       <Link
                         href="/admin"
                         className="py-3 px-3 font-medium text-muted-foreground hover:text-primary hover:bg-accent rounded-md transition-colors block"

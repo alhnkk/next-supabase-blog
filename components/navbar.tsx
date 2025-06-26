@@ -79,7 +79,7 @@ interface SearchResult {
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  
+
   // ALL HOOKS MUST BE CALLED IN THE SAME ORDER EVERY TIME
   const [open, setOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -104,7 +104,7 @@ export function Navbar() {
   // AuthClient hook - ALWAYS call this hook (React rules of hooks)
   const sessionQuery = authClient.useSession();
   const { data: session, isPending: sessionLoading } = sessionQuery;
-  
+
   // Hydration kontrolü ile güvenli kullanım
   const safeSession = isHydrated ? session : null;
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { SiteMetadataProvider } from "@/components/site-metadata-provider";
-import { Navbar } from "@/components/navbar";
+import { NavbarClient } from "@/components/navbar-client";
 
 export const metadata: Metadata = {
   title: "Blog - Modern İçerik Platformu",
@@ -97,7 +97,7 @@ export default function RootLayout({
   return (
     <SiteMetadataProvider>
       <div className="bg-background">
-        <Navbar />
+        <NavbarClient />
         <div>{children}</div>
         <Footer />
       </div>

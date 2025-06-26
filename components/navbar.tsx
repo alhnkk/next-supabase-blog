@@ -100,7 +100,11 @@ export function Navbar() {
   const { categories, isLoading, error, getCategories } = useCategory();
 
   // AuthClient hook kullan - reaktif session yönetimi
-  const { data: session, isPending: sessionLoading } = authClient.useSession();
+  // SSR sırasında çalışmayacak şekilde güvenli hale getir
+  const sessionQuery = isHydrated
+    ? authClient.useSession()
+    : { data: null, isPending: true };
+  const { data: session, isPending: sessionLoading } = sessionQuery;
 
   useEffect(() => {
     // Sadece ilk renderda çağır

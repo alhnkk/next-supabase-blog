@@ -1,26 +1,7 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Footer } from "@/components/footer";
 import { SiteMetadataProvider } from "@/components/site-metadata-provider";
-
-// Navbar'ı client-side'da render et (SSR problemi çözümü)
-const Navbar = dynamic(
-  () => import("@/components/navbar").then((mod) => ({ default: mod.Navbar })),
-  {
-    ssr: false,
-    loading: () => (
-      <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="h-8 w-24 bg-gray-200 rounded animate-pulse" />
-          <div className="flex gap-2">
-            <div className="h-9 w-20 bg-gray-200 rounded animate-pulse" />
-            <div className="h-9 w-20 bg-gray-200 rounded animate-pulse" />
-          </div>
-        </div>
-      </nav>
-    ),
-  }
-);
+import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Blog - Modern İçerik Platformu",

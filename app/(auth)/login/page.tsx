@@ -16,7 +16,7 @@ function LoginForm() {
   const [error, setError] = useState("");
 
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect");
+  const redirectUrl = searchParams?.get("redirect") || null;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,9 +27,13 @@ function LoginForm() {
       if (result.error) {
         setError(result.error.message || "Giriş başarısız");
       } else {
-        console.log("✅ Login successful, redirecting to:", redirectUrl || "/");
-        // Redirect parameter varsa oraya, yoksa ana sayfaya git
-        window.location.href = redirectUrl || "/";
+        // URL'den redirect parametresini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const finalRedirectUrl =
+          urlParams.get("redirect") || redirectUrl || "/";
+
+        console.log("✅ Login successful, redirecting to:", finalRedirectUrl);
+        window.location.href = finalRedirectUrl;
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -111,6 +115,28 @@ function LoginForm() {
   );
 }
 
+// Wrapper component to handle search params safely
+function LoginPageContent() {
+  try {
+    return <LoginForm />;
+  } catch (error) {
+    console.error("Login form error:", error);
+    return (
+      <AuthCard
+        title="Giriş Yap"
+        description="Bir hata oluştu, lütfen sayfayı yenileyin."
+        error="Sayfa yüklenirken hata oluştu"
+        isLoading={false}
+        footerText="Hesabın yok mu?"
+        footerLinkText="Kayıt Ol"
+        footerLinkHref="/register"
+      >
+        <div></div>
+      </AuthCard>
+    );
+  }
+}
+
 export default function LoginPage() {
   return (
     <Suspense
@@ -130,7 +156,7 @@ export default function LoginPage() {
         </AuthCard>
       }
     >
-      <LoginForm />
+      <LoginPageContent />
     </Suspense>
   );
 }

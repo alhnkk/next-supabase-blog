@@ -117,24 +117,7 @@ function LoginForm() {
 
 // Wrapper component to handle search params safely
 function LoginPageContent() {
-  try {
-    return <LoginForm />;
-  } catch (error) {
-    console.error("Login form error:", error);
-    return (
-      <AuthCard
-        title="Giriş Yap"
-        description="Bir hata oluştu, lütfen sayfayı yenileyin."
-        error="Sayfa yüklenirken hata oluştu"
-        isLoading={false}
-        footerText="Hesabın yok mu?"
-        footerLinkText="Kayıt Ol"
-        footerLinkHref="/register"
-      >
-        <div></div>
-      </AuthCard>
-    );
-  }
+  return <LoginForm />;
 }
 
 export default function LoginPage() {

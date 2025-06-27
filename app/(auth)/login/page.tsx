@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,9 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -23,9 +27,12 @@ export default function LoginPage() {
       if (result.error) {
         setError(result.error.message || "Giriş başarısız");
       } else {
-        window.location.href = "/";
+        console.log("✅ Login successful, redirecting to:", redirectUrl || "/");
+        // Redirect parameter varsa oraya, yoksa ana sayfaya git
+        window.location.href = redirectUrl || "/";
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError("Bir hata oluştu");
     } finally {
       setIsLoading(false);

@@ -19,6 +19,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("🔍 Current user before admin update:", session.user);
+
     // Kullanıcıyı admin yap
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
@@ -53,4 +55,9 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// GET endpoint for easy testing
+export async function GET(request: NextRequest) {
+  return POST(request);
 }

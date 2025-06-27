@@ -116,72 +116,126 @@ function getContrastRatio(color1: string, color2: string): number {
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
+// Memoization cache for contrast calculations
+const contrastCache = new Map<
+  string,
+  { backgroundColor: string; color: string; borderColor?: string }
+>();
+
 /**
- * Get accessible text color for a given background color
- * Returns 'white' or 'black' based on WCAG AA contrast requirements (4.5:1)
+ * Get accessible text color for a given background color (simplified)
+ * Returns 'white' or 'black' based on a simple luminance check
  */
-export function getAccessibleTextColor(backgroundColor: string): string {
-  const whiteContrast = getContrastRatio(backgroundColor, "#ffffff");
-  const blackContrast = getContrastRatio(backgroundColor, "#000000");
+export function getAccessibleTextColorFast(backgroundColor: string): string {
+  // Simple hex to luminance calculation (faster than full WCAG)
+  const hex = backgroundColor.replace("#", "");
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
 
-  // WCAG AA requires at least 4.5:1 contrast ratio
-  if (whiteContrast >= 4.5) return "white";
-  if (blackContrast >= 4.5) return "black";
+  // Simple luminance formula (faster than WCAG)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
-  // If neither meets the requirement, choose the one with higher contrast
-  return whiteContrast > blackContrast ? "white" : "black";
+  return luminance > 0.5 ? "black" : "white";
 }
 
 /**
- * Get accessible badge styles for category colors
- * Returns optimized background and text colors for better contrast
+ * Get accessible badge styles for category colors (optimized with memoization)
  */
 export function getAccessibleBadgeStyles(categoryColor: string): {
   backgroundColor: string;
   color: string;
   borderColor?: string;
 } {
-  const textColor = getAccessibleTextColor(categoryColor);
-
-  // If the contrast is poor, adjust the background color
-  const whiteContrast = getContrastRatio(categoryColor, "#ffffff");
-  const blackContrast = getContrastRatio(categoryColor, "#000000");
-
-  if (whiteContrast < 4.5 && blackContrast < 4.5) {
-    // Poor contrast with both colors, create a more accessible version
-    const rgb = hexToRgb(categoryColor);
-    if (!rgb) return { backgroundColor: categoryColor, color: textColor };
-
-    // Darken or lighten the color to improve contrast
-    const luminance = getLuminance(rgb.r, rgb.g, rgb.b);
-
-    if (luminance > 0.5) {
-      // Light color, darken it
-      const factor = 0.6;
-      const newR = Math.round(rgb.r * factor);
-      const newG = Math.round(rgb.g * factor);
-      const newB = Math.round(rgb.b * factor);
-      return {
-        backgroundColor: `rgb(${newR}, ${newG}, ${newB})`,
-        color: "white",
-        borderColor: categoryColor,
-      };
-    } else {
-      // Dark color, create a lighter background with dark text
-      const factor = 0.15;
-      const newR = Math.round(rgb.r + (255 - rgb.r) * (1 - factor));
-      const newG = Math.round(rgb.g + (255 - rgb.g) * (1 - factor));
-      const newB = Math.round(rgb.b + (255 - rgb.b) * (1 - factor));
-      return {
-        backgroundColor: `rgb(${newR}, ${newG}, ${newB})`,
-        color: categoryColor,
-        borderColor: categoryColor,
-      };
-    }
+  // Check cache first
+  if (contrastCache.has(categoryColor)) {
+    return contrastCache.get(categoryColor)!;
   }
 
-  return {
-    backgroundColor: categoryColor,
-    color: textColor,
-  };
+  const textColor = getAccessibleTextColorFast(categoryColor);
+  let result: { backgroundColor: string; color: string; borderColor?: string };
+
+  // Simplified contrast enhancement for known problematic colors
+  const hex = categoryColor.replace("#", "").toLowerCase();
+
+  // Pre-defined fixes for common problematic colors
+  if (
+    hex === "f8df24" ||
+    hex === "ffff00" ||
+    hex.startsWith("f8d") ||
+    hex.startsWith("fff")
+  ) {
+    // Yellow-ish colors - darken significantly
+    result = {
+      backgroundColor: "#b8860b", // Dark goldenrod
+      color: "white",
+      borderColor: categoryColor,
+    };
+  } else if (
+    hex === "f59e0b" ||
+    hex.startsWith("f59") ||
+    hex.startsWith("ff9")
+  ) {
+    // Orange-ish colors - darken
+    result = {
+      backgroundColor: "#cc6600",
+      color: "white",
+      borderColor: categoryColor,
+    };
+  } else if (
+    hex === "8b5cf6" ||
+    hex.startsWith("8b5") ||
+    hex.startsWith("9b5")
+  ) {
+    // Purple-ish colors - create light background
+    result = {
+      backgroundColor: "#e9d5ff",
+      color: "#6b21a8",
+      borderColor: categoryColor,
+    };
+  } else {
+    // Default case - use original color with calculated text
+    result = {
+      backgroundColor: categoryColor,
+      color: textColor,
+    };
+  }
+
+  // Cache the result
+  contrastCache.set(categoryColor, result);
+
+  return result;
+}
+
+/**
+ * Get CSS class name for common category colors (faster than inline styles)
+ */
+export function getCategoryBadgeClass(categoryColor: string): string | null {
+  const hex = categoryColor?.replace("#", "").toLowerCase();
+
+  if (!hex) return null;
+
+  // Return static CSS classes for known colors
+  if (
+    hex === "f8df24" ||
+    hex === "ffff00" ||
+    hex.startsWith("f8d") ||
+    hex.startsWith("fff")
+  ) {
+    return "badge-yellow";
+  } else if (
+    hex === "f59e0b" ||
+    hex.startsWith("f59") ||
+    hex.startsWith("ff9")
+  ) {
+    return "badge-orange";
+  } else if (
+    hex === "8b5cf6" ||
+    hex.startsWith("8b5") ||
+    hex.startsWith("9b5")
+  ) {
+    return "badge-purple";
+  }
+
+  return null; // Use inline styles as fallback
 }

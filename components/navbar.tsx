@@ -105,17 +105,17 @@ export function Navbar() {
   const sessionQuery = authClient.useSession();
   const { data: session, isPending: sessionLoading } = sessionQuery;
 
-  // Hydration kontrolü ile güvenli kullanım
+  // Hydration kontrolü ile güvenli kullanım - FIX: Use consistent session handling
   const safeSession = isHydrated ? session : null;
 
   // ALWAYS call useEffect hooks in the same order
   useEffect(() => {
     // Sadece ilk renderda çağır
-    getCategories();
     if (isHydrated) {
+      getCategories();
       fetchSettings();
     }
-  }, [isHydrated]); // Remove function dependencies to stabilize
+  }, [isHydrated, getCategories, fetchSettings]); // Include all dependencies
 
   // Search functionality - ALWAYS call this useEffect
   useEffect(() => {
@@ -222,8 +222,12 @@ export function Navbar() {
               const target = e.target as HTMLImageElement;
               target.src = "/logo.svg";
             }}
+            suppressHydrationWarning
           />
-          <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 hover:opacity-80 transition-opacity">
+          <h2
+            className="text-2xl lg:text-3xl font-bold text-slate-900 hover:opacity-80 transition-opacity"
+            suppressHydrationWarning
+          >
             {isHydrated && settings?.siteName
               ? settings.siteName.toUpperCase()
               : "BLOG"}

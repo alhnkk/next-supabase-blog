@@ -21,7 +21,7 @@ import {
   ArrowUpRight,
   Eye,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getAccessibleBadgeStyles } from "@/lib/utils";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -102,9 +102,9 @@ const PostCard = memo(function PostCard({
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                sizes="100vw"
                 priority
-                quality={80}
+                quality={75}
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               />
@@ -145,7 +145,7 @@ const PostCard = memo(function PostCard({
           {post.category && (
             <Badge
               className="w-fit mb-4 text-sm font-semibold border-0 px-3 py-1"
-              style={{ backgroundColor: post.category.color }}
+              style={getAccessibleBadgeStyles(post.category.color)}
             >
               {post.category.name}
             </Badge>
@@ -254,7 +254,7 @@ const PostCard = memo(function PostCard({
             {post.category && (
               <Badge
                 className="absolute bottom-4 left-4 text-sm font-semibold border-0 shadow-lg px-3 py-1"
-                style={{ backgroundColor: post.category.color }}
+                style={getAccessibleBadgeStyles(post.category.color)}
               >
                 {post.category.name}
               </Badge>
@@ -404,7 +404,7 @@ const PostCard = memo(function PostCard({
           {post.category && (
             <Badge
               className="absolute top-4 left-4 text-xs font-semibold border-0 shadow-lg"
-              style={{ backgroundColor: post.category.color }}
+              style={getAccessibleBadgeStyles(post.category.color)}
             >
               {post.category.name}
             </Badge>
@@ -536,7 +536,7 @@ const PostCard = memo(function PostCard({
           {post.category && (
             <Badge
               className="absolute top-3 left-3 text-xs font-semibold border-0 shadow-md"
-              style={{ backgroundColor: post.category.color }}
+              style={getAccessibleBadgeStyles(post.category.color)}
             >
               {post.category.name}
             </Badge>
@@ -619,7 +619,7 @@ const PostCard = memo(function PostCard({
             {post.category && (
               <Badge
                 className="w-fit text-xs font-semibold border-0 mb-2"
-                style={{ backgroundColor: post.category.color }}
+                style={getAccessibleBadgeStyles(post.category.color)}
               >
                 {post.category.name}
               </Badge>
@@ -768,7 +768,7 @@ const PostCard = memo(function PostCard({
               {post.category && (
                 <Badge
                   className="text-xs font-semibold border-0"
-                  style={{ backgroundColor: post.category.color }}
+                  style={getAccessibleBadgeStyles(post.category.color)}
                 >
                   {post.category.name}
                 </Badge>
@@ -852,7 +852,7 @@ const PostCard = memo(function PostCard({
         {post.category && (
           <Badge
             className="absolute top-3 left-3 text-xs font-semibold border-0 shadow-lg"
-            style={{ backgroundColor: post.category.color }}
+            style={getAccessibleBadgeStyles(post.category.color)}
           >
             {post.category.name}
           </Badge>

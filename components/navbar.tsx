@@ -352,7 +352,7 @@ export function Navbar() {
             <Link
               href="/"
               className={` hover:text-primary transition-colors font-medium ${
-                isActive("/") ? "text-primary" : "text-muted-foreground"
+                isActive("/") ? "text-black" : "text-muted-foreground"
               }`}
             >
               ANA SAYFA
@@ -361,7 +361,7 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="font-medium h-auto p-2 text-muted-foreground hover:text-primary"
+                  className="font-medium h-auto mx-2 text-muted-foreground hover:text-primary"
                 >
                   <Link href="/categories" className="flex items-center">
                     KATEGORİLER

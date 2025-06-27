@@ -34,6 +34,12 @@ const nextConfig = {
   // Performans optimizasyonları
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
+    reactRemoveProperties: process.env.NODE_ENV === "production",
+  },
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
+    webVitalsAttribution: ["CLS", "LCP", "FCP", "FID", "TTFB"],
   },
   // Bundle optimizasyonları ve analyzer
   webpack: (config, { dev, isServer }) => {

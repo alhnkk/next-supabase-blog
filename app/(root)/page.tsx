@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
+import { getAccessibleBadgeStyles } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -246,7 +247,11 @@ export default async function HomePage({
                               src={post.coverImage}
                               alt={post.title}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              quality={85}
+                              quality={70}
+                              loading="lazy"
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
@@ -364,9 +369,7 @@ export default async function HomePage({
                               <>
                                 <Badge
                                   className="text-xs font-semibold border-0"
-                                  style={{
-                                    backgroundColor: post.category.color,
-                                  }}
+                                  style={getAccessibleBadgeStyles(post.category.color)}
                                 >
                                   {post.category.name}
                                 </Badge>
@@ -406,6 +409,11 @@ export default async function HomePage({
                                   src={post.coverImage}
                                   alt={post.title}
                                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                  quality={65}
+                                  loading="lazy"
+                                  placeholder="blur"
+                                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                 />
                               </Link>
                             ) : (
@@ -445,7 +453,15 @@ export default async function HomePage({
             {/* Sidebar */}
             <aside className="lg:col-span-1">
               <div className="sticky top-8">
-                <Suspense fallback={<SidebarSkeleton />}>
+                <Suspense
+                  fallback={
+                    <div className="space-y-4">
+                      <div className="h-64 bg-gray-100 rounded-lg animate-pulse" />
+                      <div className="h-48 bg-gray-100 rounded-lg animate-pulse" />
+                      <div className="h-32 bg-gray-100 rounded-lg animate-pulse" />
+                    </div>
+                  }
+                >
                   <Sidebar />
                 </Suspense>
               </div>

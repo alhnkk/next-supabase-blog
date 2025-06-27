@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { getAccessibleBadgeStyles } from "@/lib/utils";
 import { Calendar, FileText, ArrowRight, Grid3X3 } from "lucide-react";
 
 interface Category {
@@ -112,21 +113,21 @@ export default async function CategoriesPage() {
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
                 {/* Category Header */}
                 <div
-                  className="p-6 text-white relative overflow-hidden"
-                  style={{ backgroundColor: category.color }}
+                  className="p-6 relative overflow-hidden"
+                  style={getAccessibleBadgeStyles(category.color)}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-black/0 to-black/20"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-black/0 to-black/10"></div>
                   <div className="relative">
                     <h2 className="font-bold text-2xl mb-2">{category.name}</h2>
                     {category.description && (
-                      <p className="text-white/90 text-sm leading-relaxed">
+                      <p className="opacity-90 text-sm leading-relaxed">
                         {category.description}
                       </p>
                     )}
                     <div className="mt-4 flex items-center gap-2">
                       <Badge
                         variant="secondary"
-                        className="bg-white/20 text-white border-white/30"
+                        className="bg-black/10 border-current/30"
                       >
                         {category._count.posts} yazı
                       </Badge>
@@ -232,9 +233,11 @@ export default async function CategoriesPage() {
                 >
                   <div className="text-center p-4 rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200">
                     <div
-                      className="w-12 h-12 rounded-full mx-auto mb-3"
-                      style={{ backgroundColor: category.color }}
-                    ></div>
+                      className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-xs font-bold"
+                      style={getAccessibleBadgeStyles(category.color)}
+                    >
+                      {category.name.charAt(0).toUpperCase()}
+                    </div>
                     <h3 className="font-semibold text-sm text-gray-900 group-hover:text-blue-600 transition-colors">
                       {category.name}
                     </h3>

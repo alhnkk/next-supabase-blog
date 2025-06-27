@@ -64,11 +64,18 @@ export default function RootLayout({
             /* Critical layout styles */
             * { box-sizing: border-box; }
             html { scroll-behavior: smooth; }
-            body { margin: 0; padding: 0; line-height: 1.6; }
+            body { margin: 0; padding: 0; line-height: 1.6; background: #ffffff; }
+            
+            /* Critical hero styles */
+            .hero-image { content-visibility: auto; }
+            .hero-content { contain: layout style; }
             
             /* Loading state */
             .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
             @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+            
+            /* Performance hints */
+            img { content-visibility: auto; contain-intrinsic-size: 500px 300px; }
           `,
           }}
         />

@@ -17,15 +17,17 @@ export function UserDropdown() {
   // Hydration kontrolü
   const isHydrated = useHydration();
 
-  // SSR sırasında çalışmayacak şekilde güvenli hale getir
-  const sessionQuery = isHydrated
-    ? authClient.useSession()
-    : { data: null, isPending: true };
+  // CRITICAL FIX: Always call hooks in the same order
+  // Never call hooks conditionally - this causes React error #310
+  const sessionQuery = authClient.useSession();
   const { data: session } = sessionQuery;
 
-  if (!session?.user) return null;
+  // Only use session data after hydration, but always call the hook
+  const safeSession = isHydrated ? session : null;
 
-  const user = session.user as any;
+  if (!safeSession?.user) return null;
+
+  const user = safeSession.user as any;
 
   return (
     <DropdownMenu>

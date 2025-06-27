@@ -80,7 +80,10 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // ALL HOOKS MUST BE CALLED IN THE SAME ORDER EVERY TIME
+  // Hydration kontrolü - ALWAYS call this hook FIRST
+  const isHydrated = useHydration();
+
+  // ALL HOOKS MUST BE CALLED IN THE SAME ORDER EVERY TIME - REGARDLESS OF HYDRATION STATE
   const [open, setOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -92,20 +95,18 @@ export function Navbar() {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 800);
 
-  // Hydration kontrolü - ALWAYS call this hook
-  const isHydrated = useHydration();
-
   // Site ayarları için store - ALWAYS call this hook
   const { settings, fetchSettings } = useSiteSettingsStore();
 
   // Kategorileri hook ile çekiyoruz - ALWAYS call this hook
   const { categories, isLoading, error, getCategories } = useCategory();
 
-  // AuthClient hook - ALWAYS call this hook (React rules of hooks)
+  // AuthClient hook - ALWAYS call this hook REGARDLESS of hydration state
+  // This is critical for preventing React error #310
   const sessionQuery = authClient.useSession();
   const { data: session, isPending: sessionLoading } = sessionQuery;
 
-  // Hydration kontrolü ile güvenli kullanım - FIX: Use consistent session handling
+  // Safe session handling - only use session data after hydration
   const safeSession = isHydrated ? session : null;
 
   // ALWAYS call useEffect hooks in the same order

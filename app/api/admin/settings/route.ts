@@ -52,22 +52,10 @@ const settingsUpdateSchema = z.object({
 // GET /api/admin/settings - Sistem ayarlarını getir
 export async function GET(request: NextRequest) {
   try {
-    // Admin yetkisi kontrolü
+    // Site ayarları herkese açık olabilir, sadece hassas bilgiler gizli tutulur
     const session = await auth.api.getSession({ headers: request.headers });
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: "Bu işlem için giriş yapmalısınız" },
-        { status: 401 }
-      );
-    }
-
-    const user = session.user as any;
-    if (user.role !== "admin") {
-      return NextResponse.json(
-        { error: "Bu işlem için admin yetkisi gereklidir" },
-        { status: 403 }
-      );
-    }
+    const user = session?.user as any;
+    const isAdmin = user?.role === "admin";
 
     // Ayarları veritabanından getir veya varsayılan ayarları oluştur
     let settings = await prisma.settings.findFirst();
@@ -96,39 +84,15 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Response formatını eski API ile uyumlu hale getir
-    const response = {
+    // Public bilgiler (herkes için)
+    const publicResponse = {
       siteName: settings.siteName,
       siteDescription: settings.siteDescription || "",
       siteUrl: settings.siteUrl || "",
       siteLogo: settings.siteLogo || "",
-      adminEmail: settings.adminEmail || "",
-      defaultCategory: settings.defaultCategory || "",
       postsPerPage: settings.postsPerPage,
       enableComments: settings.enableComments,
       enableRegistration: settings.enableRegistration,
-      maintenanceMode: settings.maintenanceMode,
-      socialLinks: {
-        twitter: settings.socialTwitter || "",
-        facebook: settings.socialFacebook || "",
-        instagram: settings.socialInstagram || "",
-        linkedin: settings.socialLinkedin || "",
-        github: settings.socialGithub || "",
-      },
-      seoSettings: {
-        metaTitle: settings.metaTitle || "",
-        metaDescription: settings.metaDescription || "",
-        metaKeywords: settings.metaKeywords || "",
-        ogImage: settings.ogImage || "",
-      },
-      emailSettings: {
-        smtpHost: settings.smtpHost || "",
-        smtpPort: settings.smtpPort || 587,
-        smtpUser: settings.smtpUser || "",
-        smtpPassword: settings.smtpPassword ? "••••••••" : "",
-        fromEmail: settings.fromEmail || "",
-        fromName: settings.fromName || "",
-      },
       appearanceSettings: {
         primaryColor: settings.primaryColor,
         accentColor: settings.accentColor,
@@ -137,9 +101,46 @@ export async function GET(request: NextRequest) {
       updatedAt: settings.updatedAt.toISOString(),
     };
 
+    // Admin için tam response
+    if (isAdmin) {
+      const fullResponse = {
+        ...publicResponse,
+        adminEmail: settings.adminEmail || "",
+        defaultCategory: settings.defaultCategory || "",
+        maintenanceMode: settings.maintenanceMode,
+        socialLinks: {
+          twitter: settings.socialTwitter || "",
+          facebook: settings.socialFacebook || "",
+          instagram: settings.socialInstagram || "",
+          linkedin: settings.socialLinkedin || "",
+          github: settings.socialGithub || "",
+        },
+        seoSettings: {
+          metaTitle: settings.metaTitle || "",
+          metaDescription: settings.metaDescription || "",
+          metaKeywords: settings.metaKeywords || "",
+          ogImage: settings.ogImage || "",
+        },
+        emailSettings: {
+          smtpHost: settings.smtpHost || "",
+          smtpPort: settings.smtpPort || 587,
+          smtpUser: settings.smtpUser || "",
+          smtpPassword: settings.smtpPassword ? "••••••••" : "",
+          fromEmail: settings.fromEmail || "",
+          fromName: settings.fromName || "",
+        },
+      };
+
+      return NextResponse.json({
+        success: true,
+        data: fullResponse,
+      });
+    }
+
+    // Public kullanıcılar için
     return NextResponse.json({
       success: true,
-      data: response,
+      data: publicResponse,
     });
   } catch (error) {
     console.error("[GET /api/admin/settings]:", error);

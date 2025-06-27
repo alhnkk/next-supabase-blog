@@ -115,7 +115,7 @@ export function Navbar() {
       getCategories();
       fetchSettings();
     }
-  }, [isHydrated, getCategories, fetchSettings]); // Include all dependencies
+  }, [isHydrated]); // Remove function dependencies that cause re-renders
 
   // Search functionality - ALWAYS call this useEffect
   useEffect(() => {

@@ -16,7 +16,7 @@ export function SiteMetadataProvider({
     if (isHydrated) {
       fetchSettings();
     }
-  }, [isHydrated, fetchSettings]);
+  }, [isHydrated]);
 
   useEffect(() => {
     if (isHydrated && settings) {

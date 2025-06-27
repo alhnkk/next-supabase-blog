@@ -1,18 +1,18 @@
 import { createAuthClient } from "better-auth/react";
 import { adminClient } from "better-auth/client/plugins";
 
-// Dynamic base URL based on environment
+// Consistent base URL for both client and server
 const getBaseURL = () => {
-  if (typeof window !== "undefined") {
-    // Client-side: use current origin
-    return window.location.origin;
+  // Development: localhost
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
   }
 
-  // Server-side: use environment variable or fallback
+  // Production: always use BETTER_AUTH_URL
   return (
     process.env.BETTER_AUTH_URL ||
     process.env.NEXT_PUBLIC_BASE_URL ||
-    "https://next-supabase-blog-xi.vercel.app/"
+    "https://next-supabase-blog-xi.vercel.app"
   );
 };
 

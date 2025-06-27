@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     try {
       // Better Auth session kontrolü
       const session = await auth.api.getSession({
-        headers: request.headers,
+        headers: request.headers as any,
       });
 
       console.log("🔍 Middleware Debug:", {

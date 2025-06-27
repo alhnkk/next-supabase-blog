@@ -156,15 +156,7 @@ export function MostRead() {
                         {(post._count?.views || 0).toLocaleString()} okunma
                       </span>
                     </div>
-                    {post.readingTime && (
-                      <>
-                        <span className="text-gray-300">•</span>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{post.readingTime} dk</span>
-                        </div>
-                      </>
-                    )}
+
                     {post.category && (
                       <>
                         <span className="text-gray-300">•</span>

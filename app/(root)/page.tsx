@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
-import { getAccessibleBadgeStyles } from "@/lib/utils";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -369,7 +369,9 @@ export default async function HomePage({
                               <>
                                 <Badge
                                   className="text-xs font-semibold border-0"
-                                  style={getAccessibleBadgeStyles(post.category.color)}
+                                  style={{
+                                    backgroundColor: post.category.color,
+                                  }}
                                 >
                                   {post.category.name}
                                 </Badge>

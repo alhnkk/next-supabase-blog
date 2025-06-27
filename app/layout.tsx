@@ -57,53 +57,13 @@ export default function RootLayout({
         <style
           dangerouslySetInnerHTML={{
             __html: `
-            /* Critical CSS - Öncelikli yükleme için */
-            @font-face {
-              font-family: 'Playfair Display';
-              font-style: normal;
-              font-weight: 400 700;
-              font-display: swap;
-              src: url('/fonts/playfair-display.woff2') format('woff2');
-            }
-            @font-face {
-              font-family: 'Red Hat Display';
-              font-style: normal;
-              font-weight: 400 600;
-              font-display: swap;
-              src: url('/fonts/red-hat-display.woff2') format('woff2');
-            }
-
-            /* Layout kritik stiller */
+            /* Minimal Critical CSS */
             html { scroll-behavior: smooth; }
             body { 
-              font-family: 'Red Hat Display', ui-sans-serif, system-ui, sans-serif;
-              line-height: 1.6;
-              text-rendering: optimizeLegibility;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
+              font-family: system-ui, -apple-system, sans-serif;
+              margin: 0;
+              padding: 0;
             }
-            
-            /* Performance optimizations */
-            img { content-visibility: auto; }
-            .hero-section { contain: layout style paint; }
-            .post-card { will-change: transform; }
-            
-            /* Badge optimizations - statik stiller */
-            .badge-yellow { background: #b8860b !important; color: white !important; }
-            .badge-orange { background: #cc6600 !important; color: white !important; }
-            .badge-purple { background: #e9d5ff !important; color: #6b21a8 !important; }
-            
-            /* Animation keyframes */
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes slideIn {
-              from { transform: translateX(-100%); }
-              to { transform: translateX(0); }
-            }
-            .animate-in { animation: fadeIn 0.6s ease-out; }
-            .animate-slide { animation: slideIn 0.4s ease-out; }
           `,
           }}
         />

@@ -4,43 +4,56 @@ import { auth } from "@/lib/auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Admin sayfaları için Better Auth kontrolü
+  // Admin sayfaları için session kontrolü
   if (pathname.startsWith("/admin")) {
     try {
-      // Better Auth session kontrolü
-      const session = await auth.api.getSession({
-        headers: request.headers as any,
-      });
+      // Session token'ı cookie'den al
+      const sessionToken = request.cookies.get(
+        "__Secure-better-auth.session_token"
+      )?.value;
 
       console.log("🔍 Middleware Debug:", {
         pathname,
-        hasSession: !!session,
-        userId: session?.user?.id,
-        userRole: (session?.user as any)?.role,
-        isAdmin: (session?.user as any)?.isAdmin,
+        hasSessionToken: !!sessionToken,
+        cookiePresent: !!sessionToken,
       });
 
-      // Session yoksa login'e yönlendir
-      if (!session?.user) {
-        console.log("❌ No session, redirecting to login");
+      // Session token yoksa login'e yönlendir
+      if (!sessionToken) {
+        console.log("❌ No session token, redirecting to login");
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("redirect", pathname);
         return NextResponse.redirect(loginUrl);
       }
 
-      // Admin kontrolü - sadece role kontrolü yap
-      const user = session.user as any;
-      const isAdmin = user.role === "admin";
+      // Session token varsa API'ye fetch ile kontrol et
+      const response = await fetch(
+        new URL("/api/auth/get-session", request.url),
+        {
+          headers: {
+            cookie: request.headers.get("cookie") || "",
+          },
+        }
+      );
 
-      console.log("🔍 Admin Check:", {
-        userRole: user.role,
-        isAdmin,
-        redirectingToHome: !isAdmin,
+      if (!response.ok) {
+        console.log("❌ Session validation failed, redirecting to login");
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("redirect", pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+
+      const session = await response.json();
+      const user = session?.user;
+
+      console.log("🔍 Session Check:", {
+        hasUser: !!user,
+        userRole: user?.role,
+        isAdmin: user?.role === "admin",
       });
 
-      if (!isAdmin) {
+      if (!user || user.role !== "admin") {
         console.log("❌ Not admin, redirecting to home");
-        // Admin değilse ana sayfaya yönlendir
         const homeUrl = new URL("/", request.url);
         return NextResponse.redirect(homeUrl);
       }

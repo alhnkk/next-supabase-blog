@@ -13,6 +13,13 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL!,
 
+  // Add trusted origins for localhost and production
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://next-supabase-blog-xi.vercel.app",
+    process.env.NEXT_PUBLIC_BASE_URL || "",
+  ].filter(Boolean),
+
   logger: {
     level: "debug",
     disabled: process.env.NODE_ENV === "production",

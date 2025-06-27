@@ -16,7 +16,7 @@ export default function ContactPage() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">İletişim</h1>
-        <p className="text-lg text-slate-600 mx-auto">
+        <p className="text-lg w-full text-slate-600 mx-auto">
           Sorularınız, önerileriniz veya işbirliği teklifleriniz için bizimle
           iletişime geçin.
         </p>

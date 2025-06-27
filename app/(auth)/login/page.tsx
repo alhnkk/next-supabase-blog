@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { AuthCard } from "@/components/auth-card";
 import { Loader2, Mail, Lock } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -108,5 +108,29 @@ export default function LoginPage() {
         </Button>
       </form>
     </AuthCard>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <AuthCard
+          title="Giriş Yap"
+          description="Yükleniyor..."
+          isLoading={true}
+          footerText="Hesabın yok mu?"
+          footerLinkText="Kayıt Ol"
+          footerLinkHref="/register"
+        >
+          <div className="space-y-4">
+            <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+            <div className="h-11 bg-gray-100 rounded animate-pulse"></div>
+          </div>
+        </AuthCard>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

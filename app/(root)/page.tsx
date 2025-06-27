@@ -1,10 +1,15 @@
 import { PostCard } from "@/components/post-card";
-import { PostPagination } from "@/components/post-pagination";
 import { Suspense, lazy } from "react";
 import { SidebarSkeleton } from "@/components/ui/skeleton-loader";
 
 const Sidebar = lazy(() =>
   import("@/components/sidebar").then((module) => ({ default: module.Sidebar }))
+);
+
+const PostPagination = lazy(() =>
+  import("@/components/post-pagination").then((module) => ({
+    default: module.PostPagination,
+  }))
 );
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -187,6 +192,17 @@ export default async function HomePage({
 
   return (
     <>
+      {/* Critical Image Preload */}
+      {heroPost?.coverImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={heroPost.coverImage}
+          imageSizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          fetchPriority="high"
+        />
+      )}
+
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -411,12 +427,18 @@ export default async function HomePage({
 
               {/* Pagination */}
               <div className="pt-8">
-                <PostPagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  totalPosts={totalPosts}
-                  postsPerPage={postsPerPage}
-                />
+                <Suspense
+                  fallback={
+                    <div className="h-16 animate-pulse bg-gray-100 rounded-lg" />
+                  }
+                >
+                  <PostPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalPosts={totalPosts}
+                    postsPerPage={postsPerPage}
+                  />
+                </Suspense>
               </div>
             </main>
 

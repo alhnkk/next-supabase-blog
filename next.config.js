@@ -35,7 +35,7 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
-  // Bundle optimizasyonları
+  // Bundle optimizasyonları ve analyzer
   webpack: (config, { dev, isServer }) => {
     // Sadece production'da ve client-side'da optimizasyon
     if (!dev && !isServer) {
@@ -44,24 +44,14 @@ const nextConfig = {
         ...config.optimization,
         sideEffects: false,
       };
+
+      // Bundle analyzer (skip for now due to ES modules compatibility)
+      if (process.env.ANALYZE === "true") {
+        console.log("Bundle analysis would run here");
+      }
     }
     return config;
   },
-  // Bundle analyzer
-  ...(process.env.ANALYZE === "true" && {
-    webpack: (config) => {
-      if (process.env.ANALYZE === "true") {
-        const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-        config.plugins.push(
-          new BundleAnalyzerPlugin({
-            analyzerMode: "static",
-            openAnalyzer: false,
-          })
-        );
-      }
-      return config;
-    },
-  }),
   // Better Auth External Packages
   serverExternalPackages: ["better-auth"],
   // Statik optimizasyon

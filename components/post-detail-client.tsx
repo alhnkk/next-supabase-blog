@@ -1,17 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Sidebar } from "@/components/sidebar";
-import { CommentSection } from "@/components/comments/comment-section";
-import { CommentStats } from "@/components/comments/comment-stats";
 import { ViewTracker } from "@/components/view-tracker";
-import { RelatedPosts } from "@/components/related-posts";
 import { DynamicPostStats } from "@/components/dynamic-post-stats";
 import { PostLikeButtons } from "@/components/post-like-buttons";
 import { PostSaveButton } from "@/components/post-save-button";
 import { PostShareButton } from "@/components/post-share-button";
+
+// Lazy load heavy components
+const CommentSection = lazy(() =>
+  import("@/components/comments/comment-section").then((module) => ({
+    default: module.CommentSection,
+  }))
+);
+
+const CommentStats = lazy(() =>
+  import("@/components/comments/comment-stats").then((module) => ({
+    default: module.CommentStats,
+  }))
+);
+
+const RelatedPosts = lazy(() =>
+  import("@/components/related-posts").then((module) => ({
+    default: module.RelatedPosts,
+  }))
+);
 import {
   Calendar,
   Clock,
@@ -81,7 +97,9 @@ export function PostDetailClient({
             className="object-cover object-center scale-105 transition-transform duration-700 ease-out"
             priority
             sizes="100vw"
-            quality={95}
+            quality={85}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
           />
 
           {/* Multi-layered Gradient Overlay */}
@@ -161,6 +179,10 @@ export function PostDetailClient({
                           width={48}
                           height={48}
                           className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
+                          quality={60}
+                          loading="lazy"
+                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                         />
                       ) : (
                         <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
@@ -360,19 +382,51 @@ export function PostDetailClient({
 
             {/* Related Posts */}
             <div className="mt-8">
-              <RelatedPosts
-                currentPostId={post.id}
-                categoryId={post.categoryId}
-                categoryName={post.category?.name}
-              />
+              <Suspense
+                fallback={
+                  <div className="space-y-4">
+                    <div className="h-6 bg-gray-200 rounded w-1/3 animate-pulse" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {[1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="h-48 bg-gray-200 rounded-lg animate-pulse"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                }
+              >
+                <RelatedPosts
+                  currentPostId={post.id}
+                  categoryId={post.categoryId}
+                  categoryName={post.category?.name}
+                />
+              </Suspense>
             </div>
 
             {/* Comment Section */}
             <div className="mt-8">
-              <CommentSection
-                postId={post.id}
-                allowComments={post.allowComments}
-              />
+              <Suspense
+                fallback={
+                  <div className="space-y-4">
+                    <div className="h-6 bg-gray-200 rounded w-1/4 animate-pulse" />
+                    <div className="space-y-3">
+                      {[1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="h-20 bg-gray-200 rounded-lg animate-pulse"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                }
+              >
+                <CommentSection
+                  postId={post.id}
+                  allowComments={post.allowComments}
+                />
+              </Suspense>
             </div>
           </main>
 

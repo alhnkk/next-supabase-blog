@@ -270,7 +270,7 @@ export default async function HomePage({
                         {/* Content */}
                         <div className="space-y-3">
                           <Link href={`/post/${post.slug}`}>
-                            <h3 className="font-semibold text-lg leading-tight text-slate-800 group-hover:text-slate-600 transition-colors line-clamp-2">
+                            <h3 className="font-bold text-xl leading-tight text-slate-800 group-hover:text-slate-600 transition-colors line-clamp-2 mb-2">
                               {post.title}
                             </h3>
                           </Link>

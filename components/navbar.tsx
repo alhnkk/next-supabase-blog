@@ -359,15 +359,13 @@ export function Navbar() {
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="font-medium h-auto mx-2 text-muted-foreground hover:text-primary"
+                <Link
+                  href="/categories"
+                  className="flex items-center hover:text-primary transition-colors"
                 >
-                  <Link href="/categories" className="flex items-center">
-                    KATEGORİLER
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Link>
-                </Button>
+                  KATEGORİLER
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56 shadow-lg">
                 <DropdownMenuItem asChild>
@@ -432,8 +430,8 @@ export function Navbar() {
             </DropdownMenu>
             <Link
               href="/iletisim"
-              className={`font-medium  hover:text-primary transition-colors ${
-                isActive("/iletisim") ? "text-primary" : "text-muted-foreground"
+              className={`font-medium hover:text-primary transition-colors ${
+                isActive("/iletisim") ? "text-primary" : "text-black"
               }`}
             >
               İLETİŞİM

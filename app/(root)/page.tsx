@@ -231,8 +231,8 @@ export default async function HomePage({
                         <div className="aspect-[4/3] mb-6 overflow-hidden rounded-lg bg-slate-100">
                           {post.coverImage ? (
                             <Image
-                              width={500}
-                              height={500}
+                              width={290}
+                              height={220}
                               src={post.coverImage}
                               alt={post.title}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -240,7 +240,6 @@ export default async function HomePage({
                               loading="lazy"
                               placeholder="blur"
                               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
@@ -391,12 +390,12 @@ export default async function HomePage({
 
                         {/* Image - Right Side */}
                         <div className="order-1 lg:order-2">
-                          <div className="aspect-[4/3] overflow-hidden rounded-lg bg-slate-100 shadow-sm">
+                          <div className="aspect-[4/3] overflow-hidden w-[430px] h-[325px] rounded-lg bg-slate-100 shadow-sm">
                             {post.coverImage ? (
                               <Link href={`/post/${post.slug}`}>
                                 <Image
-                                  width={500}
-                                  height={500}
+                                  width={430}
+                                  height={325}
                                   src={post.coverImage}
                                   alt={post.title}
                                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -404,7 +403,6 @@ export default async function HomePage({
                                   loading="lazy"
                                   placeholder="blur"
                                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                 />
                               </Link>
                             ) : (

@@ -117,10 +117,9 @@ export function MostRead() {
                     <Image
                       src={post.coverImage}
                       alt={post.title}
-                      fill
-                      className="object-cover"
-                      sizes="48px"
-                      quality={75}
+                      className="object-cover aspect-square"
+                      width={50}
+                      height={50}
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">

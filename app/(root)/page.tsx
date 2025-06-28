@@ -193,17 +193,6 @@ export default async function HomePage({
 
   return (
     <>
-      {/* Critical Image Preload */}
-      {heroPost?.coverImage && (
-        <link
-          rel="preload"
-          as="image"
-          href={heroPost.coverImage}
-          imageSizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-          fetchPriority="high"
-        />
-      )}
-
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"

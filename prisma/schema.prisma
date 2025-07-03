@@ -117,9 +117,7 @@ model Post {
   title           String
   slug            String      @unique
   excerpt         String
-  introduction    String?
   content         String
-  conclusion      String?
   coverImage      String?
   gallery         String[]    @default([])
   status          PostStatus  @default(DRAFT)
